@@ -194,7 +194,7 @@
 
           $wgScriptPath = "/w";
 
-          $wgServer = "{{urlScheme}}://" . isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "{{wgServer}}";
+          $wgServer = "{{urlScheme}}://" . (isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "{{wgServer}}");
           $wgResourceBasePath = $wgScriptPath;
           $wgLogos = [
               '1x' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
