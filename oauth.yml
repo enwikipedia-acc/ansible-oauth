@@ -193,7 +193,8 @@
           $wgMetaNamespace = "OAuth_Test_Wiki";
 
           $wgScriptPath = "/w";
-          $wgServer = "{{urlScheme}}://" . $_SERVER['SERVER_NAME'];
+
+          $wgServer = "{{urlScheme}}://" . isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : "{{wgServer}}";
           $wgResourceBasePath = $wgScriptPath;
           $wgLogos = [
               '1x' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
