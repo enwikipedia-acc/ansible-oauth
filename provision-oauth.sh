@@ -3,7 +3,7 @@
 echo "Starting provision..."
 
 if [[ "$1" == "--sync" ]]; then 
-    cd /opt/provisioning/ansible
+    cd /opt/provisioning/
     sudo git config pull.ff only
     sudo git pull
 
@@ -44,7 +44,7 @@ echo "Using ${urlScheme}://${dnsName}/ as public endpoint."
 ### run playbooks
 
 if stat /dev/${disktype}b >/dev/null; then
-    ansible-playbook -i localhost, -c local -b /opt/provisioning/ansible/oauth.yml -e disktype=$disktype -e wgServer=$dnsName -e urlScheme=$urlScheme
+    ansible-playbook -i localhost, -c local -b /opt/provisioning/oauth.yml -e disktype=$disktype -e wgServer=$dnsName -e urlScheme=$urlScheme
 else
     echo "Required disks not yet mounted, not running automatic provisioning."
 fi
