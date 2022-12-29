@@ -176,9 +176,13 @@
         - /var/www/www/w/extensions/OAuth/
         - /var/www/www/w/extensions/AntiSpoof/
 
-    - name: Generate wgSecretKey
-      shell: openssl rand -hex 32
-      register: wgSecretKey
+    - name: Create logs directory
+      ansible.builtin.file:
+        path: "/var/log/mediawiki"
+        state: directory
+        mode: '0755'
+        owner: www-data
+        group: www-data
     - name: Local settings
       ansible.builtin.copy:
         content: |
@@ -212,7 +216,7 @@
           $wgMemCachedServers = [];
           $wgLocaltimezone = "UTC";
 
-          $wgSecretKey = "{{wgSecretKey.stdout}}";
+          $wgSecretKey = "e773a8f14c0ec3bd76585a06707607ef5446aef4fdecc667077c484697be67d1";
 
           $wgAuthenticationTokenVersion = "1";
 
@@ -253,6 +257,14 @@
           $wgEmailAuthentication = false;
           $wgShowExceptionDetails = true;
           $wgBlockDisablesLogin = true;
+
+          $wgDebugLogFile = "/var/log/mediawiki/debug.log";
+          $wgDebugLogGroups = array(
+            'exception' => '/var/log/mediawiki/exception.log',
+            'error' => '/var/log/mediawiki/error.log',
+            'OAuth' => '/var/log/mediawiki/OAuth.log',
+          );
+
         dest: /var/www/www/w/LocalSettings.php
 
     - name: Update MediaWiki
@@ -265,7 +277,7 @@
         cmd: php maintenance/edit.php -b --user "Ansible playbook"  "Main Page"
         chdir: /var/www/www/w
         stdin: |
-          This wiki is intended for testing OAuth applications against MediaWiki.
+          This wiki is intended for testing OAuth applications against MediaWiki. If you need access to experiment with OAuth, contact [[Special:ListUsers/sysop|an existing user with access]] for an account.
 
           == OAuth consumers ==
 
