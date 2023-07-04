@@ -6,7 +6,7 @@
     disktype: sd
     base_packages:
       - apache2
-      - libapache2-mod-php7.4
+      - libapache2-mod-php8.2
       - mariadb-server
       - redis
       - htop
@@ -90,7 +90,7 @@
   vars:
     wgServer: localhost
     urlScheme: https
-    version: REL1_38
+    version: REL1_40
   tasks:
     - name: check if LocalSettings.php exists
       stat: 
