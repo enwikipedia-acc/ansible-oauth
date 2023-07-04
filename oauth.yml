@@ -16,6 +16,7 @@
       - php-redis
       - php-mysql
       - php-intl
+      - php-curl
       - composer
       - python3-pymysql
 
