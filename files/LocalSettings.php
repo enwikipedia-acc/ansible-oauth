@@ -120,7 +120,7 @@ $wgConf->settings = [
         'default' => "/var/log/mediawiki/debug.log",
     ],
     'wgCdnServersNoPurge' => [
-        'default' => '192.168.50.0/24'
+        'default' => ['192.168.50.0/24']
     ],
     'wgUsePrivateIPs' => [
         'default' => true
