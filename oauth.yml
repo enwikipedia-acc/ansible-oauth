@@ -266,7 +266,7 @@
 
     - name: Update Title blacklist
       ansible.builtin.shell:
-        cmd: php maintenance/edit.php --wikidb "{{item}}"" -b --user "Ansible playbook"  "MediaWiki:Titleblacklist"
+        cmd: php maintenance/edit.php --wikidb "{{item}}" -b --user "Ansible playbook"  "MediaWiki:Titleblacklist"
         chdir: /var/www/w
         stdin: |
           # This is a disallowed titles list. Titles and usernames that match a regular expression here cannot be created.
