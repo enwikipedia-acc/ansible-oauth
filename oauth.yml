@@ -67,6 +67,13 @@
         mode: '0644'
       notify: Restart apache2
 
+    - name: Enable mod_rewrite
+      ansible.builtin.file:
+        src: /etc/apache2/mods-available/rewrite.load
+        dest: /etc/apache2/mods-enabled/rewrite.load
+        state: link
+      notify: Restart apache2
+
     - name: Fix FS permissions for /var/lib/mysql
       ansible.builtin.file:
         path: /var/lib/mysql
