@@ -138,7 +138,7 @@
         name: {{item}}
         state: present
         login_unix_socket: /var/run/mysqld/mysqld.sock
-      loop: {{wikis}}
+      loop: "{{wikis}}"
 
     - name: MediaWiki git checkout
       ansible.builtin.git:
@@ -222,7 +222,7 @@
         mode: '0755'
         owner: www-data
         group: www-data
-      loop: {{wikis}}
+      loop: "{{wikis}}"
 
     - name: Install MediaWiki
       ansible.builtin.shell:
