@@ -135,7 +135,7 @@
 
     - name: Create wiki databases
       community.mysql.mysql_db:
-        name: {{item}}
+        name: "{{item}}"
         state: present
         login_unix_socket: /var/run/mysqld/mysqld.sock
       loop: "{{wikis}}"
