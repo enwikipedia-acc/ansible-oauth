@@ -30,8 +30,6 @@ $wgConf->suffixes = [ 'wiki' ];
 
 $wgMetaNamespace = "OAuth_Test_Wiki";
 
-$wgScriptPath = "/w";
-
 $wgResourceBasePath = $wgScriptPath;
 $wgLogos = [
     '1x' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
@@ -88,8 +86,11 @@ $wgConf->settings = [
     'wgServer' => [
         'default' => 'https://$wiki.sbx.aws.stwalkerster.cloud',
     ],
+    'wgScriptPath' => [
+        'default' => '/w'
+    ],
     'wgArticlePath' => [
-        'default' => '/w/index.php/$1',
+        'default' => '/wiki/$1',
     ],
     'wgSitename' => [
         'default' => 'CentralAuthTestWiki',

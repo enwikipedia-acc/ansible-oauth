@@ -101,17 +101,17 @@
   tasks:
     - name: check if LocalSettings.php exists
       stat: 
-        path: /var/www/www/w/LocalSettings.php
+        path: /var/www/w/LocalSettings.php
       register: localsettings
     - name: Create www mountpoint
       ansible.builtin.file:
-        path: "/var/www/www"
+        path: "/var/www"
         state: directory
         mode: '0755'
     - name: Root redirect
       ansible.builtin.copy:
         content: '<?php header("Location: /w/index.php");'
-        dest: /var/www/www/index.php
+        dest: /var/www/index.php
     - name: Create MySQL user
       community.mysql.mysql_user:
         state: present
@@ -143,7 +143,7 @@
     - name: MediaWiki git checkout
       ansible.builtin.git:
         repo: https://gerrit.wikimedia.org/r/mediawiki/core.git
-        dest: /var/www/www/w
+        dest: /var/www/w
         version: "{{version}}"
         recursive: false
         accept_hostkey: true
@@ -152,7 +152,7 @@
     - name: AntiSpoof git checkout
       ansible.builtin.git:
         repo: https://gerrit.wikimedia.org/r/p/mediawiki/extensions/AntiSpoof.git
-        dest: /var/www/www/w/extensions/AntiSpoof
+        dest: /var/www/w/extensions/AntiSpoof
         version: "{{version}}"
         accept_hostkey: true
         force: yes
@@ -160,7 +160,7 @@
     - name: CentralAuth git checkout
       ansible.builtin.git:
         repo: https://gerrit.wikimedia.org/r/mediawiki/extensions/CentralAuth.git
-        dest: /var/www/www/w/extensions/CentralAuth
+        dest: /var/www/w/extensions/CentralAuth
         version: "{{version}}"
         accept_hostkey: true
         force: yes
@@ -168,7 +168,7 @@
     - name: CheckUser git checkout
       ansible.builtin.git:
         repo: https://gerrit.wikimedia.org/r/p/mediawiki/extensions/CheckUser.git
-        dest: /var/www/www/w/extensions/CheckUser
+        dest: /var/www/w/extensions/CheckUser
         version: "{{version}}"
         accept_hostkey: true
         force: yes
@@ -176,7 +176,7 @@
     - name: TitleBlacklist git checkout
       ansible.builtin.git:
         repo: https://gerrit.wikimedia.org/r/p/mediawiki/extensions/TitleBlacklist.git
-        dest: /var/www/www/w/extensions/TitleBlacklist
+        dest: /var/www/w/extensions/TitleBlacklist
         version: "{{version}}"
         accept_hostkey: true
         force: yes
@@ -184,7 +184,7 @@
     - name: OAuth git checkout
       ansible.builtin.git:
         repo: https://gerrit.wikimedia.org/r/p/mediawiki/extensions/OAuth.git
-        dest: /var/www/www/w/extensions/OAuth
+        dest: /var/www/w/extensions/OAuth
         version: "{{version}}"
         accept_hostkey: true
         force: yes
@@ -192,7 +192,7 @@
     - name: Vector git checkout
       ansible.builtin.git:
         repo: https://gerrit.wikimedia.org/r/mediawiki/skins/Vector.git
-        dest: /var/www/www/w/skins/Vector
+        dest: /var/www/w/skins/Vector
         version: "{{version}}"
         accept_hostkey: true
         force: yes
@@ -200,12 +200,12 @@
     - name: Composer
       include_tasks: composer.yml
       loop:
-        - /var/www/www/w/
-        - /var/www/www/w/extensions/CentralAuth/
-        - /var/www/www/w/extensions/CheckUser/
-        - /var/www/www/w/extensions/TitleBlacklist/
-        - /var/www/www/w/extensions/OAuth/
-        - /var/www/www/w/extensions/AntiSpoof/
+        - /var/www/w/
+        - /var/www/w/extensions/CentralAuth/
+        - /var/www/w/extensions/CheckUser/
+        - /var/www/w/extensions/TitleBlacklist/
+        - /var/www/w/extensions/OAuth/
+        - /var/www/w/extensions/AntiSpoof/
 
     - name: Create logs directory
       ansible.builtin.file:
@@ -227,35 +227,35 @@
     - name: Install MediaWiki
       ansible.builtin.shell:
         cmd: php maintenance/run.php install --dbname=metawiki --dbpass=wikiuser --server="{{urlScheme}}://{{wgServer}}" --scriptpath=/w --lang=en --pass=Adminpassword "Metawiki" Admin
-        chdir: /var/www/www/w
+        chdir: /var/www/w
       when: wikidb.changed
 
     - name: Local settings
       ansible.builtin.copy:
-        src: ./LocalSettings.php
-        dest: /var/www/www/w/LocalSettings.php
+        src: LocalSettings.php
+        dest: /var/www/w/LocalSettings.php
 
     - name: Install CentralAuth database
       ansible.builtin.shell:
         cmd: php maintenance/run.php sql --wikidb centralauth extensions/CentralAuth/schema/mysql/tables-generated.sql
-        chdir: /var/www/www/w
+        chdir: /var/www/w
       when: wikidb.changed
 
     - name: Install Central AntiSpoof database
       ansible.builtin.shell:
         cmd: php maintenance/run.php sql --wikidb centralauth extensions/AntiSpoof/sql/mysql/tables-generated.sql
-        chdir: /var/www/www/w
+        chdir: /var/www/w
       when: wikidb.changed
 
     - name: Update MediaWiki
       ansible.builtin.shell:
         cmd: php maintenance/run.php update --quick --wikidb metawiki
-        chdir: /var/www/www/w
+        chdir: /var/www/w
 
     - name: Update Main Page
       ansible.builtin.shell:
         cmd: php maintenance/edit.php --wikidb metawiki -b --user "Ansible playbook"  "Main Page"
-        chdir: /var/www/www/w
+        chdir: /var/www/w
         stdin: |
           This wiki is intended for testing OAuth applications against MediaWiki. If you need access to experiment with OAuth, contact [[Special:ListUsers/sysop|an existing user with access]] for an account.
 
@@ -281,7 +281,7 @@
     - name: Update Title blacklist
       ansible.builtin.shell:
         cmd: php maintenance/edit.php --wikidb metawiki -b --user "Ansible playbook"  "MediaWiki:Titleblacklist"
-        chdir: /var/www/www/w
+        chdir: /var/www/w
         stdin: |
           # This is a disallowed titles list. Titles and usernames that match a regular expression here cannot be created.
           # Use "#" for comments.
@@ -291,7 +291,7 @@
     - name: Update copyright
       ansible.builtin.shell:
         cmd: php maintenance/edit.php --wikidb metawiki -b --user "Ansible playbook"  "MediaWiki:Copyright"
-        chdir: /var/www/www/w
+        chdir: /var/www/w
         stdin: |
           Content is available under $1 unless otherwise noted.
 
