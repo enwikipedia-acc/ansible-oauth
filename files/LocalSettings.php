@@ -83,6 +83,12 @@ $wgEmailAuthentication = false;
 $wgShowExceptionDetails = true;
 $wgBlockDisablesLogin = true;
 
+
+$wgGroupPermissions['*']['createaccount'] = false;
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['bureaucrat']['userrights'] = false;
+$wgGroupPermissions['steward'] = [];
+
 $wgConf->settings = [
     'wgServer' => [
         'default' => 'https://$wiki.sbx.aws.stwalkerster.cloud',
@@ -101,7 +107,6 @@ $wgConf->settings = [
     'wgLanguageCode' => [
         'default' => 'en',
         'eswiki' => 'es',
-        'bnwiki' => 'bn',
     ],
     'wgDebugLogGroups' => [
         'default' => array(
@@ -114,6 +119,50 @@ $wgConf->settings = [
     'wgDebugLogFile' => [
         'default' => "/var/log/mediawiki/debug.log",
     ],
+    '+wgGroupPermissions' => [
+        'default' => [
+            'bureaucrat' => [
+                'userrights' => false
+            ],
+            'user' => [
+                'edit' => true,
+                'createaccount' => true,
+            ],
+            'accountcreator' => [
+                'override-antispoof' => true,
+                'tboverride' => true,
+            ],
+        ],
+        '+metawiki' => [
+            'steward' => [
+                'userrights' => true,
+                'userrights-interwiki' => true,
+                'centralauth-lock' => true,
+                'centralauth-suppress' => true,
+                'centralauth-unmerge' => true,
+            ],
+            'suppress' => [
+                'mwoauthsuppress' => true,
+                'mwoauthviewsuppressed' => true,
+            ],
+            'checkuser' => [
+                'mwoauthviewprivate' => true,
+            ],
+        ],
+    ],
+    '+wgAddGroups' => [
+        'default' => [
+            'bureaucrat' => [
+                'sysop', 'interface-admin', 'bot'
+            ]
+        ],
+        '+metawiki' => [
+            'user' => [
+                'oauthadmin'
+            ]
+        ]
+
+    ]
 ];
 
 function efGetSiteParams( $conf, $wiki ) {
@@ -142,16 +191,19 @@ $wgConf->suffixes = $wgLocalDatabases;
 $wgConf->siteParamsCallback = 'efGetSiteParams';
 $wgConf->extractAllGlobals( $wgDBname );
 
+$wgMWOAuthCentralWiki = 'metawiki';
+$wgMWOAuthSharedUserSource = 'CentralAuth';
+
+if ( $wgMWOAuthCentralWiki === $wgDBname || $wgMWOAuthCentralWiki === false ) {
+    // Management interfaces are available on the central wiki
+    $wgGroupPermissions['user']['mwoauthproposeconsumer'] = true;
+    $wgGroupPermissions['user']['mwoauthupdateownconsumer'] = true;
+    $wgGroupPermissions['oauthadmin']['mwoauthmanageconsumer'] = true;
+    $wgOAuthGroupsToNotify = [ 'oauthadmin' ];
+}
+
 // OAuth setup
-$wgGroupPermissions['*']['createaccount'] = false;
-$wgGroupPermissions['*']['edit'] = false;
-$wgGroupPermissions['user']['mwoauthproposeconsumer'] = true;
-$wgGroupPermissions['user']['mwoauthupdateownconsumer'] = true;
-$wgGroupPermissions['user']['mwoauthmanageconsumer'] = true;
-$wgGroupPermissions['user']['mwoauthmanagemygrants'] = true;
-$wgGroupPermissions['suppress']['mwoauthsuppress'] = true;
-$wgGroupPermissions['suppress']['mwoauthviewsuppressed'] = true;
-$wgGroupPermissions['checkuser']['mwoauthviewprivate'] = true;
+
 $wgMWOAuthSecureTokenTransfer = false;
 
 

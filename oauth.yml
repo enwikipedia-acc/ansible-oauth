@@ -246,22 +246,22 @@
 
           == OAuth consumers ==
 
-          * [[Special:OAuthConsumerRegistration/propose|Propose a consumer]]
-          * [[Special:OAuthManageConsumers/proposed|Approve the consumer]]
+          * [[meta:Special:OAuthConsumerRegistration/propose|Propose a consumer]]
+          * [[meta:Special:OAuthManageConsumers/proposed|Approve the consumer]]
 
 
-          * [[Special:OAuthConsumerRegistration/list|My registered consumers]]
+          * [[meta:Special:OAuthConsumerRegistration/list|My registered consumers]]
 
 
           * [[Special:OAuthManageMyGrants|Consumers approved to access my account]]
 
           == All consumers ==
-          * [[Special:OAuthManageConsumers/proposed|All proposed consumers]]
-          * [[Special:OAuthManageConsumers/approved|All approved consumers]]
+          * [[meta:Special:OAuthManageConsumers/proposed|All proposed consumers]]
+          * [[meta:Special:OAuthManageConsumers/approved|All approved consumers]]
 
-          * [[Special:OAuthManageConsumers/disabled|All disabled consumers]]
-          * [[Special:OAuthManageConsumers/rejected|All rejected consumers]]
-          * [[Special:OAuthManageConsumers/expired|All expired consumers]]
+          * [[meta:Special:OAuthManageConsumers/disabled|All disabled consumers]]
+          * [[meta:Special:OAuthManageConsumers/rejected|All rejected consumers]]
+          * [[meta:Special:OAuthManageConsumers/expired|All expired consumers]]
       loop: "{{wikis}}"
 
     - name: Update Title blacklist
@@ -299,4 +299,22 @@
         cmd: "php extensions/CentralAuth/maintenance/migratePass1.php --wiki {{item}}"
         chdir: /var/www/w
       loop: "{{wikis}}"
+      when: wikidb.changed
+
+    - name: Configure intial global group
+      ansible.builtin.shell:
+        cmd: php maintenance/run.php sql --wiki centralauth --query "INSERT INTO global_group_permissions (ggp_group,ggp_permission) VALUES ('steward','globalgrouppermissions'), ('steward','globalgroupmembership');"
+        chdir: /var/www/w
+      when: wikidb.changed
+
+    - name: Promote initial user to steward
+      ansible.builtin.shell:
+        cmd: php maintenance/run.php createAndPromote --wiki metawiki --custom-groups steward --force Admin
+        chdir: /var/www/w
+      when: wikidb.changed
+
+    - name: Run Steward migration
+      ansible.builtin.shell:
+        cmd: "php extensions/CentralAuth/maintenance/migrateStewards.php --wiki metawiki"
+        chdir: /var/www/w
       when: wikidb.changed
