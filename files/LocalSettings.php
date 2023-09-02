@@ -202,7 +202,7 @@ $wgConf->siteParamsCallback = 'efGetSiteParams';
 $wgConf->extractAllGlobals( $wgDBname );
 
 $wgCentralAuthCookies = true;
-$wgCentralAuthCookieDomain = '.sbx.aws.stwalkerster.cloud';
+$wgCentralAuthCookieDomain = 'sbx.aws.stwalkerster.cloud';
 $wgCentralAuthAutoCreateWikis = ['metawiki'];
 
 $wgMWOAuthCentralWiki = 'metawiki';
