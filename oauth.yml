@@ -209,7 +209,7 @@
 
     - name: Install MediaWiki
       ansible.builtin.shell:
-        cmd: php maintenance/run.php install --dbname="{{item}}" --dbpass=wikiuser --server="{{urlScheme}}://{{wgServer}}" --scriptpath=/w --lang=en --pass=Adminpassword "Metawiki" Admin
+        cmd: php maintenance/run.php install --dbname="{{item}}" --dbpass=wikiuser --server="{{urlScheme}}://{{wgServer}}" --scriptpath=/w "--conf=LocalSettings.{{item}}.php" --lang=en --pass=Adminpassword "Metawiki" Admin
         chdir: /var/www/w
       when: wikidb.changed
       loop: "{{wikis}}"
