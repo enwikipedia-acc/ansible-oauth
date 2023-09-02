@@ -221,25 +221,25 @@
 
     - name: Install CentralAuth database
       ansible.builtin.shell:
-        cmd: php maintenance/run.php sql --wikidb centralauth extensions/CentralAuth/schema/mysql/tables-generated.sql
+        cmd: php maintenance/run.php sql --wiki centralauth extensions/CentralAuth/schema/mysql/tables-generated.sql
         chdir: /var/www/w
       when: wikidb.changed
 
     - name: Install Central AntiSpoof database
       ansible.builtin.shell:
-        cmd: php maintenance/run.php sql --wikidb centralauth extensions/AntiSpoof/sql/mysql/tables-generated.sql
+        cmd: php maintenance/run.php sql --wiki centralauth extensions/AntiSpoof/sql/mysql/tables-generated.sql
         chdir: /var/www/w
       when: wikidb.changed
 
     - name: Update MediaWiki
       ansible.builtin.shell:
-        cmd: "php maintenance/run.php update --quick --wikidb {{item}}"
+        cmd: "php maintenance/run.php update --quick --wiki {{item}}"
         chdir: /var/www/w
       loop: "{{wikis}}"
 
     - name: Update Main Page
       ansible.builtin.shell:
-        cmd: php maintenance/edit.php --wikidb "{{item}}" -b --user "Ansible playbook"  "Main Page"
+        cmd: php maintenance/edit.php --wiki "{{item}}" -b --user "Ansible playbook"  "Main Page"
         chdir: /var/www/w
         stdin: |
           This wiki is intended for testing OAuth applications against MediaWiki. If you need access to experiment with OAuth, contact [[Special:ListUsers/sysop|an existing user with access]] for an account.
@@ -266,7 +266,7 @@
 
     - name: Update Title blacklist
       ansible.builtin.shell:
-        cmd: php maintenance/edit.php --wikidb "{{item}}" -b --user "Ansible playbook"  "MediaWiki:Titleblacklist"
+        cmd: php maintenance/edit.php --wiki "{{item}}" -b --user "Ansible playbook"  "MediaWiki:Titleblacklist"
         chdir: /var/www/w
         stdin: |
           # This is a disallowed titles list. Titles and usernames that match a regular expression here cannot be created.
@@ -277,7 +277,7 @@
 
     - name: Update copyright
       ansible.builtin.shell:
-        cmd: php maintenance/edit.php --wikidb "{{item}}" -b --user "Ansible playbook"  "MediaWiki:Copyright"
+        cmd: php maintenance/edit.php --wiki "{{item}}" -b --user "Ansible playbook"  "MediaWiki:Copyright"
         chdir: /var/www/w
         stdin: |
           Content is available under $1 unless otherwise noted.
