@@ -289,7 +289,7 @@
 
     - name: Set admin user email address
       ansible.builtin.shell:
-        cmd: "php maintenance/migratePass0.php --wiki {{item}} --no-reset-password Admin root@localhost"
+        cmd: "php maintenance/resetUserEmail.php --wiki {{item}} --no-reset-password Admin root@localhost"
         chdir: /var/www/w
       loop: "{{wikis}}"
       when: wikidb.changed
