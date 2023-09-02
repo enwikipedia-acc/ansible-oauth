@@ -30,11 +30,7 @@ $wgConf->suffixes = [ 'wiki' ];
 
 $wgMetaNamespace = "OAuth_Test_Wiki";
 
-$wgResourceBasePath = $wgScriptPath;
-$wgLogos = [
-    '1x' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
-    'icon' => "$wgResourceBasePath/resources/assets/change-your-logo-icon.svg",
-];
+
 
 $wgEmergencyContact = "acc-oauth-wikis@sbx.aws.stwalkerster.cloud";
 $wgPasswordSender = "acc-oauth-wikis@sbx.aws.stwalkerster.cloud";
@@ -140,6 +136,12 @@ function efGetSiteParams( $conf, $wiki ) {
 $wgConf->suffixes = $wgLocalDatabases;
 $wgConf->siteParamsCallback = 'efGetSiteParams';
 $wgConf->extractAllGlobals( $wgDBname );
+
+$wgResourceBasePath = $wgScriptPath;
+$wgLogos = [
+    '1x' => "$wgResourceBasePath/resources/assets/change-your-logo.svg",
+    'icon' => "$wgResourceBasePath/resources/assets/change-your-logo-icon.svg",
+];
 
 
 // OAuth setup
