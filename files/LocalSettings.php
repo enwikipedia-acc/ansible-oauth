@@ -139,6 +139,9 @@ $wgConf->settings = [
                 'override-antispoof' => true,
                 'tboverride' => true,
             ],
+            '*' => [
+                'autocreateaccount' => true
+            ]
         ],
         '+metawiki' => [
             'steward' => [
@@ -198,7 +201,8 @@ $wgConf->suffixes = $wgLocalDatabases;
 $wgConf->siteParamsCallback = 'efGetSiteParams';
 $wgConf->extractAllGlobals( $wgDBname );
 
-$wgCentralAuthCookies = '.sbx.aws.stwalkerster.cloud';
+$wgCentralAuthCookies = true;
+$wgCentralAuthCookieDomain = '.sbx.aws.stwalkerster.cloud';
 $wgCentralAuthAutoCreateWikis = ['metawiki'];
 
 $wgMWOAuthCentralWiki = 'metawiki';
