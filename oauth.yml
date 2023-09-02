@@ -292,9 +292,11 @@
         cmd: "php extensions/CentralAuth/maintenance/migratePass0.php --wiki {{item}}"
         chdir: /var/www/w
       loop: "{{wikis}}"
+      when: wikidb.changed
 
     - name: CentralAuth migration pass 1
       ansible.builtin.shell:
         cmd: "php extensions/CentralAuth/maintenance/migratePass1.php --wiki {{item}}"
         chdir: /var/www/w
       loop: "{{wikis}}"
+      when: wikidb.changed
