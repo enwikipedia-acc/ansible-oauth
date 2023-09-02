@@ -171,6 +171,7 @@
         - CheckUser
         - TitleBlacklist
         - OAuth
+        - Interwiki
     
     - name: Vector git checkout
       ansible.builtin.git:
@@ -189,6 +190,7 @@
         - /var/www/w/extensions/TitleBlacklist/
         - /var/www/w/extensions/OAuth/
         - /var/www/w/extensions/AntiSpoof/
+        - /var/www/w/extensions/Interwiki/
 
     - name: Create logs directory
       ansible.builtin.file:
@@ -236,6 +238,13 @@
         cmd: "php maintenance/run.php update --quick --wiki {{item}}"
         chdir: /var/www/w
       loop: "{{wikis}}"
+
+    - name: Configure meta interwiki
+      ansible.builtin.command:
+        cmd: php maintenance/run.php sql --wiki {{item}} --query "insert into interwiki (iw_prefix, iw_url, iw_local, iw_api, iw_wikiid) values ('meta', 'https://metawiki.sbx.aws.stwalkerster.cloud/wiki/$1', 1, '', '');"
+        chdir: /var/www/w
+      loop: "{{wikis}}"
+      when: wikidb.changed
 
     - name: Update Main Page
       ansible.builtin.shell:
@@ -324,11 +333,4 @@
       ansible.builtin.shell:
         cmd: "php extensions/CentralAuth/maintenance/migrateStewards.php --wiki metawiki"
         chdir: /var/www/w
-      when: wikidb.changed
-
-    - name: Configure meta interwiki
-      ansible.builtin.command:
-        cmd: php maintenance/run.php sql --wiki {{item}} --query "insert into interwiki (iw_prefix, iw_url, iw_local, iw_api, iw_wikiid) values ('meta', 'https://metawiki.sbx.aws.stwalkerster.cloud/wiki/$1', 1, '', '');"
-        chdir: /var/www/w
-      loop: "{{wikis}}"
       when: wikidb.changed

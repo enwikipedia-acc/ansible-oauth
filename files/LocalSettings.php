@@ -69,6 +69,7 @@ wfLoadExtension( 'CentralAuth' );
 wfLoadExtension( 'CheckUser' );
 wfLoadExtension( 'OAuth' );
 wfLoadExtension( 'TitleBlacklist' );
+wfLoadExtension( 'Interwiki' );
 
 // Caching setup
 $wgObjectCaches['redis'] = array(
