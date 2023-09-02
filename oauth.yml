@@ -327,10 +327,8 @@
       when: wikidb.changed
 
     - name: Configure meta interwiki
-      ansible.builtin.shell:
-        cmd: php maintenance/run.php sql --wiki {{item}} --query "insert into interwiki (iw_prefix, iw_url, iw_local, iw_api, iw_wikiid) values ('meta', 'https://metawiki.sbx.aws.stwalkerster.cloud/wiki/\$1', 1, '', '');"
+      ansible.builtin.command:
+        cmd: php maintenance/run.php sql --wiki {{item}} --query "insert into interwiki (iw_prefix, iw_url, iw_local, iw_api, iw_wikiid) values ('meta', 'https://metawiki.sbx.aws.stwalkerster.cloud/wiki/$1', 1, '', '');"
         chdir: /var/www/w
       loop: "{{wikis}}"
       when: wikidb.changed
-
-      
