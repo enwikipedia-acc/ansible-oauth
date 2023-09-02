@@ -287,6 +287,14 @@
           </div>
       loop: "{{wikis}}"
 
+    - name: Set admin user email address
+      ansible.builtin.shell:
+        cmd: "php maintenance/migratePass0.php --wiki {{item}} --no-reset-password Admin root@localhost"
+        chdir: /var/www/w
+      loop: "{{wikis}}"
+      when: wikidb.changed
+
+
     - name: CentralAuth migration pass 0
       ansible.builtin.shell:
         cmd: "php extensions/CentralAuth/maintenance/migratePass0.php --wiki {{item}}"
@@ -296,9 +304,8 @@
 
     - name: CentralAuth migration pass 1
       ansible.builtin.shell:
-        cmd: "php extensions/CentralAuth/maintenance/migratePass1.php --wiki {{item}}"
+        cmd: "php extensions/CentralAuth/maintenance/migratePass1.php --wiki metawiki"
         chdir: /var/www/w
-      loop: "{{wikis}}"
       when: wikidb.changed
 
     - name: Configure intial global group

@@ -110,14 +110,20 @@ $wgConf->settings = [
     ],
     'wgDebugLogGroups' => [
         'default' => array(
-            'exception' => '/var/log/mediawiki/$wiki-exception.log',
-            'error' => '/var/log/mediawiki/$wiki-error.log',
-            'OAuth' => '/var/log/mediawiki/$wiki-OAuth.log',
-            'CentralAuth' => '/var/log/mediawiki/$wiki-CentralAuth.log',
+            'exception' => '/var/log/mediawiki/$wiki/exception.log',
+            'error' => '/var/log/mediawiki/$wiki/error.log',
+            'OAuth' => '/var/log/mediawiki/$wiki/OAuth.log',
+            'CentralAuth' => '/var/log/mediawiki/$wiki/CentralAuth.log',
         ),
     ],
     'wgDebugLogFile' => [
         'default' => "/var/log/mediawiki/debug.log",
+    ],
+    'wgCdnServersNoPurge' => [
+        'default' => '192.168.50.0/24'
+    ],
+    'wgUsePrivateIPs' => [
+        'default' => true
     ],
     '+wgGroupPermissions' => [
         'default' => [
@@ -190,6 +196,9 @@ function efGetSiteParams( $conf, $wiki ) {
 $wgConf->suffixes = $wgLocalDatabases;
 $wgConf->siteParamsCallback = 'efGetSiteParams';
 $wgConf->extractAllGlobals( $wgDBname );
+
+$wgCentralAuthCookies = '.sbx.aws.stwalkerster.cloud';
+$wgCentralAuthAutoCreateWikis = ['metawiki'];
 
 $wgMWOAuthCentralWiki = 'metawiki';
 $wgMWOAuthSharedUserSource = 'CentralAuth';
