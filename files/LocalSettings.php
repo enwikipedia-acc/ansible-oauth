@@ -219,5 +219,6 @@ if ( $wgMWOAuthCentralWiki === $wgDBname || $wgMWOAuthCentralWiki === false ) {
 // OAuth setup
 
 $wgMWOAuthSecureTokenTransfer = false;
-
-
+$wgOAuthAutoApprove = [ 'grants' => [ 'mwoauth-authonly', 'mwoauth-authonlyprivate', 'basic' ] ];
+$wgOAuth2PublicKey = '/srv/oauth2.pub';
+$wgOAuth2PrivateKey = '/srv/oauth2.key';
