@@ -98,7 +98,7 @@
   vars:
     wgServer: localhost
     urlScheme: https
-    version: REL1_40
+    version: REL1_42
     wikis:
       - metawiki
       - enwiki
